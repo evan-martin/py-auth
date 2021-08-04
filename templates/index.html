@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shrimp Shack</title>
+    <link href="{{ url_for('static',filename='styles/content.css') }}" rel="stylesheet">
+</head>
+
+<!-- this is a comment -->
+
+<body>
+<div class="header">
+    <h1> Welcome to the Shrimp Shack</h1>
+    <form action="{{ url_for('logout') }}" method="post">
+        <button>Logout</button>
+    </form>
+
+</div>
+<div class="home">
+    <a class="link" href="page1">
+        <button>Recipe 1</button>
+        <img alt="Shrimp" src="/static/images/shrimp1.jpg"/>
+    </a>
+    <a class="link" href="page2">
+        <button>Recipe 2</button>
+        <img alt="Shrimp" src="/static/images/shrimp2.jpg"/>
+    </a>
+</div>
+<div class="footer">
+    <p>Every website needs a footer, right?</p>
+    <p> Today's Date is: {{ date }} </p>
+</div>
+</body>
+</html>

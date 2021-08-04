@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shrimp Shack</title>
+    <link href="{{ url_for('static',filename='styles/content.css') }}" rel="stylesheet">
+</head>
+
+<!-- this is a comment -->
+
+<body>
+<div class="header">
+    <h1> Welcome to the Shrimp Shack</h1>
+    <form action="{{ url_for('logout') }}" method="post">
+        <button>Logout</button>
+    </form>
+</div>
+<div class="home">
+    <div class="link">
+        <a href="/">
+            <button>Back</button>
+        </a>
+        <img alt="Shrimp" src="/static/images/shrimp1.jpg"/>
+    </div>
+    <div class="recipe-text">
+        <div>
+            <h5> Ingredients </h5>
+            <ul>
+                <li>(click to purchase ingredient)</li>
+                <a href="https://www.walmart.com/ip/Great-Value-Frozen-Raw-Large-Peeled-and-Deveined-Tail-Off-Shrimp-2-lb-31-40-count-per-lb/791288879"
+                   target="_blank">
+                    <li>List One</li>
+                </a>
+                <a href="https://www.amazon.com/Fresh-Brand-Medium-Peeled-Deveined/dp/B07ZS3QJ32/ref=sr_1_2_0o_fs?dchild=1&keywords=shrimp&qid=1627412539&sr=8-2"
+                   target="_blank">
+                    <li>List Two</li>
+                </a>
+                <a href="https://www.target.com/p/large-tail-off-peeled-38-deveined-raw-shrimp-frozen-41-50ct-good-38-gather-8482/-/A-14871930#lnk=sametab"
+                   target="_blank">
+                    <li>List Three</li>
+                </a>
+            </ul>
+        </div>
+        <div>
+            <h5> Instructions </h5>
+            <ol>
+                <li>List One</li>
+                <li>List Two</li>
+                <li>List Three</li>
+            </ol>
+        </div>
+        <div>
+            <h5> More Shrimp </h5>
+            <img alt="Shrimp" class="img-sm" src="/static/images/shrimp3.jpg"/>
+            <img alt="Shrimp" class="img-sm" src="/static/images/shrimp4.jpg"/>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <p>Every website needs a footer, right?</p>
+    <p> Today's Date is: {{ date }} </p>
+</div>
+</body>
+</html>
