@@ -74,6 +74,15 @@ def page2(date=dt):
     return 'You are not logged in'
 
 
+@app.route('/update', methods=['GET', 'POST'])
+def update():
+    """renders the update template and allows user to reset password"""
+    error = ''
+    if 'username' in session:
+        return render_template('update.html', user=session["username"])
+    return 'You are not logged in'
+
+
 @app.route('/', methods=['GET', 'POST'])
 def login(date=dt):
     """logs a user in and renders the login template"""

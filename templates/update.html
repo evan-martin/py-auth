@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log In</title>
+    <link href="{{ url_for('static',filename='styles/forms.css') }}" rel="stylesheet">
+</head>
+<body>
+
+<div class="login">
+    <h2>Update Password for </h2>
+    <h2> {{ user }} </h2>
+
+
+    <form action="{{ url_for('update') }}" method="post">
+        <div class="msg">{{ msg }}</div>
+
+        <label for="password"> New Password: </label><input id="password" name="password" placeholder="Enter Password"
+                                                            type="password">
+        <button type="submit">Update</button>
+
+    </form>
+    <p>Change your mind?</p>
+    <button onclick="window.location.href='/';">Cancel</button>
+
+
+</div>
+
+</body>
+</html>
