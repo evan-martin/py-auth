@@ -22,7 +22,7 @@
 
 
     <form action="{{ url_for('update') }}" method="post">
-        <div class="msg">{{ msg }}</div>
+        <div class="msg">{{ error }}</div>
 
         <label for="password"> New Password: </label><input id="password" name="password" placeholder="Enter Password"
                                                             type="password">

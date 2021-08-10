@@ -4,17 +4,20 @@ import re
 
 import uuid
 
+import logging
+
 from datetime import datetime
 
 from flask import Flask, render_template, request, session, redirect
 
 from passlib.hash import sha256_crypt
 
-
 app = Flask(__name__)
 dt = datetime.now()
 app.secret_key = uuid.uuid4().hex
-
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+logging.basicConfig(filename='access.log', format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
 
 # --------------------Register and Login Helper Functions -------------------------
 
@@ -38,12 +41,41 @@ def check_hashed_password(username, user_pass):
     """checks the users password matches the hashed password"""
     with open('passfile.txt', "r") as file:
         lines = file.readlines()
-        for i in range(len(lines)):
-            line = lines[i]
+        hash_index = 1
+        for line in lines:
             if line.strip() == username:
-                hash_pass = lines[i + 1].strip()
+                hash_pass = lines[hash_index].strip()
                 if sha256_crypt.verify(user_pass, hash_pass):
                     return bool(1)
+            hash_index += 1
+    return bool(0)
+
+
+def update_password(username, password):
+    """updates a users password"""
+    with open('passfile.txt', "r+") as file:
+        lines = file.readlines()
+        hash_index = 1
+        for line in lines:
+            if line.strip() == username:
+                break
+            hash_index += 1
+    current_line = 0
+    with open('passfile.txt', 'w') as file:
+        for line in lines:
+            if current_line == hash_index:
+                hash_pass = sha256_crypt.hash(password)
+                file.write(hash_pass + "\n")
+            else:
+                file.write(line)
+            current_line += 1
+
+
+def check_common_passwords(password):
+    """checks for commonly used passwords"""
+    with open('CommonPassword.txt', "r") as file:
+        if password in file.read():
+            return bool(1)
     return bool(0)
 
 
@@ -79,14 +111,31 @@ def update():
     """renders the update template and allows user to reset password"""
     error = ''
     if 'username' in session:
-        return render_template('update.html', user=session["username"])
-    return 'You are not logged in'
+        if request.method == 'POST':
+
+            username = session['username']
+            password = request.form['password']
+
+            if check_common_passwords(password):
+                error = 'Password is too common'
+            elif not pw_complexity_check(password):
+                error = 'Password must be 12 characters in length, ' \
+                        'and include at least 1 uppercase ' \
+                        'character, 1 lowercase character, 1 number ' \
+                        'and 1 special character'
+            else:
+                update_password(username, password)
+                return redirect('/')
+    return render_template('update.html', error=error, user=session["username"])
 
 
 @app.route('/', methods=['GET', 'POST'])
 def login(date=dt):
     """logs a user in and renders the login template"""
+
     error = ''
+    client_ip = request.remote_addr
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -96,7 +145,8 @@ def login(date=dt):
             return render_template('index.html', msg=error, date=date)
 
     error = 'Incorrect username or password!'
-    return render_template('login.html', msg=error, )
+    logging.warning('Failed Login by: %s', client_ip)
+    return render_template('login.html', msg=error)
 
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -124,8 +174,10 @@ def register():
             error = 'User Taken'
         elif not username or not password:
             error = 'Fill all fields'
+        elif check_common_passwords(password):
+            error = 'Password is too common'
         elif not pw_complexity_check(password):
-            error = 'Password must be 12 characters in length, and include at least 1'\
+            error = 'Password must be 12 characters in length, and include at least 1' \
                     'uppercase character, 1 lowercase character, 1 number and 1 special character'
         else:
             with open('passfile.txt', "a+") as file:

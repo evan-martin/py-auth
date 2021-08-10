@@ -13,9 +13,14 @@
 <div class="header">
 
     <h1> Welcome to the Shrimp Shack</h1>
-    <form action="{{ url_for('logout') }}" method="post">
-        <button>Logout</button>
-    </form>
+     <div class="buttonbar">
+        <form action="{{ url_for('logout') }}" method="post">
+            <button>Logout</button>
+        </form>
+        <form action="{{ url_for('update') }}" method="get">
+            <button>Update</button>
+        </form>
+    </div>
 
 </div>
 <div class="home">
